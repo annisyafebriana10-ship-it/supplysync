@@ -1,5 +1,10 @@
 <?php
 
+// 🚨 PAKSA TAMPILKAN ERROR KE LAYAR 🚨
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(E_ALL);
+
 require __DIR__ . '/../vendor/autoload.php';
 $app = require_once __DIR__ . '/../bootstrap/app.php';
 
@@ -15,7 +20,7 @@ $directories = [
 
 foreach ($directories as $directory) {
     if (!is_dir($directory)) {
-        mkdir($directory, 0755, true);
+        mkdir($directory, 0777, true); // Diubah ke 0777 agar izin akses terbuka penuh
     }
 }
 
@@ -23,7 +28,7 @@ foreach ($directories as $directory) {
 $app->useStoragePath('/tmp/storage');
 $app->usePublicPath(__DIR__ . '/../public');
 
-// 3. Jalankan aplikasi seperti biasa
+// 3. Jalankan aplikasi
 $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 $response = $kernel->handle(
     $request = Illuminate\Http\Request::capture()
