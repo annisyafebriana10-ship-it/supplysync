@@ -25,7 +25,7 @@ Route::get('/', [CountryController::class, 'index']);
 
 // FIREWALL: RATE LIMITING (MITIGASI BRUTE-FORCE & DDOS)
 // Membatasi akses maksimal 10 kali dalam 1 menit
-Route::middleware(['throttle:10,1'])->group(function () {
+Route::middleware(['throttle:3,1'])->group(function () {
     
     // 1. Perlindungan Jalur Autentikasi (Anti Brute-Force)
     Route::post('/firebase-login', [FirebaseAuthController::class, 'login']);
@@ -80,27 +80,35 @@ Route::middleware(['auth', PreventBackHistory::class, AdminOnly::class])->prefix
     Route::put('/articles/{id}', [AdminController::class, 'updateArticle'])->name('admin.articles.update');
     Route::delete('/articles/{id}', [AdminController::class, 'deleteArticle'])->name('admin.articles.delete');
     
-     // BACKUP
+     // ==========================================
+    // RUTE RAHASIA UNTUK DEMO BACKUP (TUGAS KEAMANAN)
+    // ==========================================
     Route::get('/backup-database', function () {
         try {
-            // 1. Eksekusi proses pencadangan database
-            \Illuminate\Support\Facades\Artisan::call('backup:run', ['--only-db' => true]);
+            // 1. Jalankan backup tanpa memicu error notifikasi email
+            \Illuminate\Support\Facades\Artisan::call('backup:run', [
+                '--only-db' => true,
+                '--disable-notifications' => true
+            ]);
             
-            // 2. Cari file .zip terbaru yang baru saja dibuat
+            // Tangkap log/pesan dari proses backup untuk melihat error
+            $log = \Illuminate\Support\Facades\Artisan::output();
+            
+            // 2. Cari file .zip terbaru
             $backupName = config('backup.backup.name');
             $files = \Illuminate\Support\Facades\Storage::disk('local')->files($backupName);
-            
-            // Ambil file zip yang paling terakhir dibuat
             $latestBackup = end($files);
             
-            // 3. Langsung unduh file tersebut ke laptop
+            // 3. Unduh file atau tampilkan penyebab gagalnya
             if ($latestBackup) {
                 return \Illuminate\Support\Facades\Storage::disk('local')->download($latestBackup);
             }
-            return "Backup gagal ditemukan di server.";
+            
+            // JIKA GAGAL, TAMPILKAN LOG ASLINYA DI LAYAR
+            return "Backup gagal dibuat. Ini log dari server Railway:<br><br><pre>" . $log . "</pre>";
             
         } catch (\Exception $e) {
-            return "Terjadi kesalahan: " . $e->getMessage();
+            return "Terjadi kesalahan sistem: " . $e->getMessage();
         }
     });
 });
