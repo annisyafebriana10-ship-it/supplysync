@@ -25,7 +25,7 @@ Route::get('/', [CountryController::class, 'index']);
 
 // FIREWALL: RATE LIMITING (MITIGASI BRUTE-FORCE & DDOS)
 // Membatasi akses maksimal 10 kali dalam 1 menit
-Route::middleware(['throttle:3,1'])->group(function () {
+Route::middleware(['throttle:10,1'])->group(function () {
     
     // 1. Perlindungan Jalur Autentikasi (Anti Brute-Force)
     Route::post('/firebase-login', [FirebaseAuthController::class, 'login']);
@@ -80,9 +80,8 @@ Route::middleware(['auth', PreventBackHistory::class, AdminOnly::class])->prefix
     Route::put('/articles/{id}', [AdminController::class, 'updateArticle'])->name('admin.articles.update');
     Route::delete('/articles/{id}', [AdminController::class, 'deleteArticle'])->name('admin.articles.delete');
     
-     // ==========================================
-    // RUTE RAHASIA UNTUK DEMO BACKUP (TUGAS KEAMANAN)
-    // ==========================================
+     
+    // DEMO BACKUP
     Route::get('/backup-database', function () {
         try {
             // 1. Jalankan backup tanpa memicu error notifikasi email
