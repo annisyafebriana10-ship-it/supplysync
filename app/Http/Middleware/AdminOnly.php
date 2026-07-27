@@ -16,7 +16,7 @@ class AdminOnly
             return $next($request); // Lolos, silakan masuk ke halaman admin
         }
 
-        // 2. Jika bukan admin, tendang ke halaman utama dengan pesan error keamanan
-        return redirect('/')->with('error', 'Akses ditolak! Anda tidak memiliki hak akses untuk masuk ke halaman Admin Panel.');
+        // 2. Jika bukan admin, tampilkan halaman error 403
+        abort(403, 'Akses ditolak! Anda tidak memiliki hak akses untuk masuk ke halaman Admin Panel.');
     }
 }
