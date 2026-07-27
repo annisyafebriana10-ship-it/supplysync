@@ -17,6 +17,3 @@ Proyek ini mengimplementasikan prinsip Keamanan Informasi dengan spesifikasi ber
 
 ## ⚙️ Konfigurasi Cloud (Config-as-Code)
 Proyek ini menggunakan fail `nixpacks.toml` pada *root directory* untuk memaksakan orkestrasi *environment* secara spesifik (mengikat versi Node.js dan klien PostgreSQL) sebelum proses kompilasi (*build*) di Railway, guna mencegah bentrok dependensi.
-
----
-*Dokumentasi ini disusun untuk memenuhi penilaian mata kuliah Keamanan Informasi.*
