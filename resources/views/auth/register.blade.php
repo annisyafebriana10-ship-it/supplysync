@@ -11,8 +11,8 @@
     <style>
         :root {
             --corporate-dark: #1E293B;
-            --primary-green: #4FBE89;
-            --primary-green-hover: #3da374;
+            --primary-green: #86A789;
+            --primary-green-hover: #4F6F52;
             --bg-light: #F8FAFC;
         }
 
