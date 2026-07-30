@@ -11,23 +11,54 @@
     <style>
         :root {
             --corporate-dark: #1E293B;
-            --matcha-500: #86A789;
-            --matcha-700: #4F6F52;
+            --primary-green: #4FBE89;
+            --primary-green-hover: #3da374;
+            --bg-light: #F8FAFC;
         }
 
         body {
-            background-color: #F8FAFC;
+            background-color: var(--bg-light);
             height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin: 0;
+            overflow: hidden; /* Mencegah munculnya scrollbar yang tidak perlu */
         }
 
         .login-card {
             border: none;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
             overflow: hidden;
+        }
+
+        .icon-container {
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-green);
+            border-radius: 10px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(79, 190, 137, 0.25);
+        }
+
+        .btn-primary-custom {
+            background-color: var(--primary-green);
+            border: none;
+            color: white;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary-custom:hover {
+            background-color: var(--primary-green-hover);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .form-control {
+            font-size: 0.9rem;
         }
     </style>
 </head>
@@ -36,58 +67,54 @@
 
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-5">
+            <!-- Kolom diperkecil untuk desktop agar kartu tidak terlalu lebar -->
+            <div class="col-11 col-sm-8 col-md-6 col-lg-4">
                 <div class="card login-card">
-                    <div class="card-body p-5">
-                        <div class="text-center mb-4">
-                            <div class="d-inline-flex justify-content-center align-items-center mb-3 shadow-sm"
-                                style="width: 60px; height: 60px; background-color: var(--matcha-500); border-radius: 12px;">
-                                <i class="fa-solid fa-anchor text-white fs-3"></i>
+                    <!-- Padding dikurangi dari p-5 menjadi p-4 -->
+                    <div class="card-body p-4">
+                        <div class="text-center mb-3">
+                            <div class="icon-container mb-2">
+                                <i class="fa-solid fa-anchor text-white fs-4"></i>
                             </div>
-                            <h4 class="fw-bold" style="color: var(--corporate-dark);">SupplySync</h4>
-                            <p class="text-muted small">Global Supply Chain Risk Intelligence</p>
+                            <h5 class="fw-bold mb-0" style="color: var(--corporate-dark);">SupplySync</h5>
+                            <p class="text-muted small mb-0">Global Supply Chain Risk Intelligence</p>
                         </div>
 
                         @if($errors->any())
-                            <div class="alert alert-danger small rounded-3 border-0">
+                            <div class="alert alert-danger small rounded-3 border-0 py-2 mb-3">
                                 <i class="fa-solid fa-triangle-exclamation me-1"></i> {{ $errors->first() }}
                             </div>
                         @endif
 
-                        <div id="loginError" class="alert alert-danger d-none"></div>
+                        <div id="loginError" class="alert alert-danger d-none py-2 small mb-3"></div>
 
                         <form id="loginForm">
                             @csrf
+                            <div class="mb-2">
+                                <label class="form-label text-secondary" style="font-size: 0.75rem; font-weight: 700;">ALAMAT EMAIL</label>
+                                <input id="email" type="email" class="form-control bg-light border-0" required autofocus>
+                            </div>
                             <div class="mb-3">
-                                <label class="form-label text-secondary small fw-bold">ALAMAT EMAIL</label>
-                                <input id="email" type="email" class="form-control bg-light border-0 py-2" required
-                                    autofocus>
+                                <label class="form-label text-secondary" style="font-size: 0.75rem; font-weight: 700;">PASSWORD</label>
+                                <input id="password" type="password" class="form-control bg-light border-0" required>
                             </div>
-                            <div class="mb-4">
-                                <label class="form-label text-secondary small fw-bold">PASSWORD</label>
-                                <input id="password" type="password" class="form-control bg-light border-0 py-2"
-                                    required>
-                            </div>
-                            <button type="submit" class="btn w-100 text-white fw-bold py-2 mb-3 shadow-sm"
-                                style="background-color: var(--matcha-700); border-radius: 8px;">
+                            <button type="submit" class="btn btn-primary-custom w-100 fw-bold py-2 mb-2" style="border-radius: 8px; font-size: 0.9rem;">
                                 Masuk ke Sistem
                             </button>
-                            <div class="d-flex align-items-center my-3">
+                            
+                            <div class="d-flex align-items-center my-2">
                                 <hr class="flex-grow-1">
-                                <span class="px-2 text-muted small">ATAU</span>
+                                <span class="px-2 text-muted" style="font-size: 0.7rem;">ATAU</span>
                                 <hr class="flex-grow-1">
                             </div>
 
-                            <button type="button" id="googleLogin" class="btn btn-outline-secondary w-100 py-2">
-
-                                <i class="fab fa-google me-2"></i>
-                                Masuk dengan Google
-
+                            <button type="button" id="googleLogin" class="btn btn-outline-secondary w-100 py-1" style="font-size: 0.9rem;">
+                                <i class="fab fa-google me-2"></i> Masuk dengan Google
                             </button>
 
-                            <div class="text-center mt-3">
+                            <div class="text-center mt-3" style="font-size: 0.85rem;">
                                 Belum punya akun?
-                                <a href="{{ route('register') }}">Daftar</a>
+                                <a href="{{ route('register') }}" style="color: var(--primary-green); text-decoration: none; font-weight: 600;">Daftar</a>
                             </div>
                         </form>
                     </div>
@@ -96,6 +123,7 @@
         </div>
     </div>
 
+    <!-- LOGIKA JAVASCRIPT SAMA SEKALI TIDAK DISENTUH -->
     <script type="module">
 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
